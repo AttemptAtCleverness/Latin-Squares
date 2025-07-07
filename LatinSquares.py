@@ -11,7 +11,7 @@ import random
 
 # ### Misc Functions
 
-# In[52]:
+# In[ ]:
 
 
 def print_square(square):
@@ -21,6 +21,16 @@ def print_square(square):
     for row in square:
         print(row)
     print()
+
+
+# In[ ]:
+
+
+def hash_square(square) -> tuple:
+    '''
+    Convert square (list of list) in to a hashable form (tuple of tuples)
+    '''
+    return tuple(tuple(row) for row in square)
 
 
 # In[53]:
@@ -471,7 +481,7 @@ def find_reduced_in_isotopy_class(n):
 
 # In[71]:
 
-
+'''
 #eq_classes_3x3, eq_class_sizes_3x3 = equivalence(3)
 #print("Number of equivalence classes:", len(eq_classes_3x3))
 #print("Sizes of classes:", eq_class_sizes_3x3)
@@ -482,12 +492,13 @@ print("Sizes of classes:", isotopy_class_sizes_3x3)
 
 reduced_squares_3x3, num_reduced_squares_3x3 = find_reduced_in_isotopy_class(isotopy_classes_3x3)
 print()
-print("Number of reduced squares in each isotopy class:", num_reduced_squares_3x3)
+print("Number of reduced squares in each isotopy class:", num_reduced_squares_3x3
+'''
 
 
 # In[ ]:
 
-
+'''
 #eq_classes_4x4, eq_class_sizes_4x4 = equivalence(4)
 #print("Number of equivalence classes:", len(eq_classes_4x4))
 #print("Sizes of classes:", eq_class_sizes_4x4)
@@ -499,19 +510,20 @@ print("Sizes of classes:", isotopy_class_sizes_4x4)
 reduced_squares_4x4, num_reduced_squares_4x4 = find_reduced_in_isotopy_class(isotopy_classes_4x4)
 print()
 print("Number of reduced squares in each isotopy class:", num_reduced_squares_4x4)
+'''
 
 
 # In[73]:
 
-
+'''
 #eq_classes_5x5, eq_class_sizes_5x5 = equivalence(5)
 #print("Number of equivalence classes:", len(eq_classes_5x5))
 #print("Sizes of classes:", eq_class_sizes_5x5)
 #print()
-'''for eq_class in eq_classes_5x5:
+for eq_class in eq_classes_5x5:
     for _ in range(3):
         print(eq_class[_])
-    print('New Class -------')'''
+    print('New Class -------')
     
 
 print("5x5: ")
@@ -523,18 +535,18 @@ reduced_squares_5x5, num_reduced_squares_5x5 = find_reduced_in_isotopy_class(iso
 print()
 print("Number of reduced squares in each isotopy class:", num_reduced_squares_5x5)
 
-
+'''
 # ### 5. "Improved" Jacobson-Matthews Shuffler
 
 # In[67]:
 
-
+'''
 import RandomSquareGenerator # Imported from different file 
 
 latin = RandomSquareGenerator.rlatin(7)
 latin.shuffle()
 ls = latin.store
-print_square(ls) 
+print_square(ls) '''
 
 
 # ### 6. Find Classes of Reduced Squares
