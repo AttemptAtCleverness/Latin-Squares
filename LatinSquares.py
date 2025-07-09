@@ -193,7 +193,7 @@ def standardize(square: list) -> list:
 # In[57]:
 
 
-def reduce_square(square: list) -> list:
+def reduce_square(square):
     '''
     Reduces latin square so first row = 1,2,..,n and first col = 1,2,..,n
     '''
@@ -617,7 +617,7 @@ def build_reduced_isotopy_classes(reduced_squares):
 
 
 # In[91]:
-
+'''
 
 reduced_squares = generate_all_squares_reduced(5)
 class_list, square_to_class = build_reduced_isotopy_classes(reduced_squares)
@@ -627,6 +627,7 @@ for cid, squares in class_list.items():
     print(f"Class {cid}: {len(squares)} squares")
     #for square in squares:
     #    print_square(square)
+'''
 
 
 # In[70]:
