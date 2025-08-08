@@ -174,7 +174,7 @@ def standardize(square: list) -> list:
     first_row = square[0]
 
     # Creates a mapping dict for standardization of square. ex {3:1, 2:3, 1:1} (3's change to 1.. )
-    row_mapping = {val: i + 1 for i, val in enumerate(first_row)}
+    row_mapping = {val: i for i, val in enumerate(first_row)}
 
     # Apply the mapping to the entire square
     standardized_square = [[row_mapping[val] for val in row] for row in square]
@@ -297,7 +297,7 @@ def isotopy(n:int):
 
     row_perms = list(permutations(range(n))) # 0 - 3
     col_perms = list(permutations(range(n))) # 0 - 3
-    sym_perms = list(permutations(range(1, n + 1))) # 1 - 4
+    sym_perms = list(permutations(range(n))) # 1 - 4
 
 
     while remaining:
@@ -313,23 +313,29 @@ def isotopy(n:int):
                 for s_perm in sym_perms:
                     # Apply row permutation
                     # ex. r_perm = (2,0,3,1) -> row 0 becomes 2, row 1 becomes 0...
-                    row_permuted = [Sj_matrix[r_perm[i]] for i in range(n)]
+                    # row_permuted = [Sj_matrix[r_perm[i]] for i in range(n)]
+                    row_permuted = [Sj_matrix[i] for i in r_perm]
+
 
                     # Apply column permutation
                     # for each row in row_permuted, for each new column position c_perm, take value at original position 
-                    col_permuted = [[row[c_perm[j]] for j in range(n)] for row in row_permuted]
+                    # col_permuted = [[row[c_perm[j]] for j in range(n)] for row in row_permuted]
+                    col_permuted = [[row[j] for j in c_perm] for row in row_permuted]
 
                     # Create symbol mapping (dict) from original symbol to permuted symbol
-                    sym_map = dict(zip(range(1, n + 1), s_perm))
+                    sym_map = dict(zip(range(n), s_perm))
                     # Apply symbol permutation
-                    final = [[sym_map[val] for val in row] for row in col_permuted]
-
+                    final = [[sym_map[val] for val in row] for row in col_permuted]   
+                    
+                    hashable = tuple(tuple(row) for row in final)
                     # convert back to hashable form and add to set
-                    isotopy_class.add(tuple(tuple(row) for row in final))
+                    isotopy_class.add(hashable)
 
         # Step 4. Record the class
         # map turns square back to list of list, then create a list of squares and add to classes
-        classes.append([list(map(list, square)) for square in isotopy_class])
+        # classes.append([list(map(list, square)) for square in isotopy_class])
+        classes.append([[list(row) for row in square] for square in isotopy_class])
+
 
         # Remove entire isotopy class from remaining
         remaining -= isotopy_class
@@ -629,6 +635,44 @@ for cid, squares in class_list.items():
     #    print_square(square)
 '''
 
+
+def generate_isotopy_class(base_square):
+    """
+    Generate the full isotopy class of a Latin square by permuting rows, columns, and symbols.
+    Supports Latin squares with symbols 1 to n.
+
+    Parameters:
+    - base_square (np.ndarray): The original Latin square of shape (n, n), using symbols 1 to n
+    - reduce_fn (callable): Optional. Function to reduce Latin square to canonical form.
+    - hash_fn (callable): Optional. Function to hash a Latin square (e.g., for deduplication).
+
+    Returns:
+    - isotopy_set: Set of unique isotopic Latin squares (optionally reduced)
+    """
+    base_square = np.array(base_square)
+    n = base_square.shape[0]
+    
+    row_perms = list(permutations(range(n)))
+    col_perms = list(permutations(range(n)))
+    sym_perms = list(permutations(range(n)))  # Symbols from 1 to n
+
+    isotopy_set = set()
+
+    for rperm in row_perms:
+        for cperm in col_perms:
+            for sperm in sym_perms:
+                # Apply row permutation
+                square = base_square[np.array(rperm), :]
+                # Apply column permutation
+                square = square[:, np.array(cperm)]
+                
+                # Apply symbol permutation (1-based)
+                sym_map = {i: sperm[i] for i in range(n)}
+                remapped = np.vectorize(sym_map.get)(square)
+
+                isotopy_set.add(tuple(map(tuple, remapped)))
+
+    return isotopy_set
 
 # In[70]:
 
