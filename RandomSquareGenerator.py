@@ -141,11 +141,11 @@ class rlatin :
    #
    def  fill(self, pattern=None) :
       # Copy from array in memory
-      if  type(pattern)== "list" :
+      if isinstance(pattern,list):
          # If initializer pattern is specified, copy it
          for row in range(self.Nrc) :
             for col in range(self.Nrc) :
-               self.store[row,col] = pattern[row,col]
+               self.store[row,col] = pattern[row][col]
          return
 
       # Copy from contents of file         
@@ -172,7 +172,16 @@ class rlatin :
       colix = list(range(self.Nrc))
       rg.shuffle(colix)
       permute( self.store, rowperm=rowix, colperm=colix )
-
+      
+   def symbol_permute(self):
+      symbol_perm = np.arange(self.Nrc)
+      rg.shuffle(symbol_perm)
+      symbol_map = {i: symbol_perm[i] for i in range(self.Nrc)}
+      self.store = np.vectorize(lambda x: symbol_map[x])(self.store)
+      
+   def isotopy_shuffle(self):
+      self.rcpermute()
+      self.symbol_permute()
 
    # Perform a search in the specified row to find the specified symbol... but
    # but SKIP the excluded column location if given.  Return the column of the   
